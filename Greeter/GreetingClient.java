@@ -8,15 +8,15 @@ import java.io.*;
 import java.util.Scanner;
 
 public class GreetingClient{
+    
+    public static String ign = "";
+
     public static void main(String [] args){
         boolean connected = true;
-
-        
             try{
                 String serverName = args[0]; //get IP address of server from first param
                 int port = Integer.parseInt(args[1]); //get port from second param
-                String message = args[2]; //get message from the third param
-
+            
                 /* Open a ClientSocket and connect to ServerSocket */
                 System.out.println("Connecting to " + serverName + " on port " + port);
                 
@@ -25,32 +25,57 @@ public class GreetingClient{
 
                 System.out.println("Just connected to " + server.getRemoteSocketAddress());
 
-                Scanner scanIn = new Scanner(System.in);
+                Scanner s = new Scanner(System.in);
+                
+                Boolean initial = true;
                 while(connected) {            
-        			/* Send data to the ServerSocket */
-                    OutputStream outToServer = server.getOutputStream();
-                    DataOutputStream out = new DataOutputStream(outToServer);
+        			
+                    if (initial) {
+                        /* Send data to the ServerSocket */
+                        OutputStream outToServer = server.getOutputStream();
+                        DataOutputStream out = new DataOutputStream(outToServer);
 
-                    System.out.println("Enter something: ");
-                    String msg;
+                        // scans name
+                        System.out.println("Enter your name: ");
+                        String name;
+                        name = s.nextLine();
 
-                    msg = scanIn.next();
+                        //out.writeUTF("Your name is: " + name);
 
-                    out.writeUTF("From client " + server.getLocalSocketAddress()+" says: " + msg);
+                        /* Receive data from the ServerSocket */
+                        InputStream inFromServer = server.getInputStream();
+                        DataInputStream in = new DataInputStream(inFromServer);
+                        //System.out.println("Server says " + in.readUTF());
+                    
+                        ign = name; // sets name to ign
+                        initial = false; // change the flag 
+                    }
+                    else {
+                        /* Send data to the ServerSocket */
+                        OutputStream outToServer = server.getOutputStream();
+                        DataOutputStream out = new DataOutputStream(outToServer);
 
-                    /* Receive data from the ServerSocket */
-                    InputStream inFromServer = server.getInputStream();
-                    DataInputStream in = new DataInputStream(inFromServer);
-                    System.out.println("Server says " + in.readUTF());
+                        // scans message
+                        System.out.print(ign + ": ");
+                        String msg;
+                        msg = s.nextLine();
+
+                        out.writeUTF(ign + ": " + msg);
+
+                        /* Receive data from the ServerSocket */
+                        InputStream inFromServer = server.getInputStream();
+                        DataInputStream in = new DataInputStream(inFromServer);
+                        //System.out.println("Server says " + in.readUTF());
+                    }
                 }
-                scanIn.close();
+                s.close();
     			//closing the socket of the client
                 //server.close();
             }catch(IOException e){
                 e.printStackTrace();
                 System.out.println("Cannot find (or disconnected from) Server");
             }catch(ArrayIndexOutOfBoundsException e){
-                System.out.println("Usage: java GreetingClient <server ip> <port no.> '<your message to the server>'");
+                System.out.println("Usage: java GreetingClient <server ip> <port no.>");
             }
     }
 }

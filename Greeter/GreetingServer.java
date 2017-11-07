@@ -34,11 +34,9 @@ public class GreetingServer extends Thread{
                     System.out.println(message); //readUTF waits for input
 
                     DataOutputStream out = new DataOutputStream(client.getOutputStream());
-                    out.writeUTF(client.getLocalSocketAddress() + "said: " + message);
-
-                    
                     /* Send data to the ClientSocket */
                     out.writeUTF("From server: " + message);
+                    
                     //out.writeUTF("Thank you for connecting to " + client.getLocalSocketAddress() + "\nGoodbye!");
                     //client.close();
                     // connected = false;

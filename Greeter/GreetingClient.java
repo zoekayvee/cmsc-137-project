@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class GreetingClient{
     
-    public static String ign = "";
+    public static String ign = ""; // in game name
 
     public static void main(String [] args){
         boolean connected = true;
@@ -48,7 +48,7 @@ public class GreetingClient{
                                     DataInputStream in = new DataInputStream(inFromServer);
                                     //System.out.println("Server says " + in.readUTF());
                                 
-                                    ign = name; // sets name to ign
+                                    ign = name; // sets given name to ign
                                     initial = false; // change the flag 
                                 }
                                 else {

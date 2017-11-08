@@ -3,6 +3,9 @@ import java.io.*;
 import java.util.Scanner;
 
 public class GreetingClient{
+    
+    public static String ign = "";
+
     public static void main(String [] args){
         boolean connected = true;
             try{
@@ -15,27 +18,54 @@ public class GreetingClient{
     			//creating a new socket for client and binding it to a port
                 Socket server = new Socket(serverName, port);
 
-                System.out.println("Just connected to " + server.getRemoteSocketAddress());
+                System.out.println("Just connected to " + server.getRemoteSocketAddress() + "\n\n");
                 
                 Thread sender = new Thread() {
                     public void run() {
-                        Scanner scanIn = new Scanner(System.in);
-                        try{
+                        Scanner s = new Scanner(System.in);
+                        Boolean initial = true;
+                        try {
                             while(connected) {            
-                                /* Send data to the ServerSocket */
-                                OutputStream outToServer = server.getOutputStream();
-                                DataOutputStream out = new DataOutputStream(outToServer);
+                                if (initial) {
+                                    /* Send data to the ServerSocket */
+                                    OutputStream outToServer = server.getOutputStream();
+                                    DataOutputStream out = new DataOutputStream(outToServer);
 
-                                String msg;
+                                    // scans name
+                                    System.out.println("Enter your name: ");
+                                    String name;
+                                    name = s.nextLine();
 
-                                msg = scanIn.next();
+                                    /* Receive data from the ServerSocket */
+                                    InputStream inFromServer = server.getInputStream();
+                                    DataInputStream in = new DataInputStream(inFromServer);
+                                    //System.out.println("Server says " + in.readUTF());
+                                
+                                    ign = name; // sets name to ign
+                                    initial = false; // change the flag 
+                                }
+                                else {
+                                    /* Send data to the ServerSocket */
+                                    OutputStream outToServer = server.getOutputStream();
+                                    DataOutputStream out = new DataOutputStream(outToServer);
 
-                                out.writeUTF("From client " + server.getLocalSocketAddress()+" says: " + msg);
+                                    // scans message
+                                    String msg;
+                                    msg = s.nextLine();
+
+                                    out.writeUTF(ign + ": " + msg);
+
+                                    /* Receive data from the ServerSocket */
+                                    InputStream inFromServer = server.getInputStream();
+                                    DataInputStream in = new DataInputStream(inFromServer);
+                                    //System.out.println("Server says " + in.readUTF());
+                                }
                             }
-                        } catch (IOException e) {
+                        s.close();
+                        } 
+                        catch (IOException e) {
                             e.printStackTrace();
                         }
-                        scanIn.close();
                     }
                 };
 
@@ -56,9 +86,6 @@ public class GreetingClient{
 
                 sender.start();
                 receiver.start();
-
-    			//closing the socket of the client
-                //server.close();
             }catch(IOException e){
                 e.printStackTrace();
                 System.out.println("Cannot find (or disconnected from) Server");

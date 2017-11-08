@@ -1,8 +1,3 @@
-/*
- * GreetingClient.java
- * CMSC137 Sample Code for TCP Socket Programming
- */
-
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
@@ -10,8 +5,6 @@ import java.util.Scanner;
 public class GreetingClient{
     public static void main(String [] args){
         boolean connected = true;
-
-        
             try{
                 String serverName = args[0]; //get IP address of server from first param
                 int port = Integer.parseInt(args[1]); //get port from second param
@@ -33,7 +26,6 @@ public class GreetingClient{
                                 OutputStream outToServer = server.getOutputStream();
                                 DataOutputStream out = new DataOutputStream(outToServer);
 
-                                System.out.println("Enter something: ");
                                 String msg;
 
                                 msg = scanIn.next();
@@ -54,7 +46,7 @@ public class GreetingClient{
                             while (connected) {
                                 InputStream inFromServer = server.getInputStream();
                                 DataInputStream in = new DataInputStream(inFromServer);
-                                System.out.println("Server says " + in.readUTF());
+                                System.out.println(in.readUTF());
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

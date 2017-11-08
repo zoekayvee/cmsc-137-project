@@ -35,7 +35,7 @@ public class GreetingServer extends Thread{
 
                     DataOutputStream out = new DataOutputStream(client.getOutputStream());
                     /* Send data to the ClientSocket */
-                    out.writeUTF("From server: " + message);
+                    out.writeUTF(message);
                     
                     //out.writeUTF("Thank you for connecting to " + client.getLocalSocketAddress() + "\nGoodbye!");
                     //client.close();

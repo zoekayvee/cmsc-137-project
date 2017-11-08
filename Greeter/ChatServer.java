@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ChatServer {
     private ServerSocket serverSocket;
-    private ArrayList<Socket> clients;
+    private ArrayList<Socket> clients; // array of clients
 
     public ChatServer(int port) throws IOException{
         //binding a socket to a port
@@ -21,7 +21,7 @@ public class ChatServer {
               try{
                 Socket client = serverSocket.accept();
                 clients.add(client);
-                System.out.println(client.getRemoteSocketAddress() + " has just connected");
+                System.out.println(client.getRemoteSocketAddress() + " has just connected"); // prompt for who connects
                 
                 // Listens if client sends a message
                 Thread clientListener = new Thread() {
@@ -31,7 +31,7 @@ public class ChatServer {
                       try {
                         DataInputStream in = new DataInputStream(client.getInputStream());
                         String message = in.readUTF();
-                        System.out.println(message); //readUTF waits for input}
+                        System.out.println(message); //readUTF waits for input
                         messageClients(message);
                       } catch (IOException e) {
                         e.printStackTrace();
@@ -51,8 +51,8 @@ public class ChatServer {
         acceptClient.start();
     }
 
-    public void messageClients(String message) {
-      for(Socket receiver: clients) {
+    public void messageClients(String message) { 
+      for(Socket receiver: clients) { // server sends messages to all clients
         try {
           DataOutputStream out = new DataOutputStream(receiver.getOutputStream());
           /* Send data to the ClientSocket */
@@ -80,46 +80,3 @@ public class ChatServer {
         }
     }
 }
-
-// public class GreetingServer extends Thread{
-//     private ServerSocket serverSocket;
-
-//     public GreetingServer(int port) throws IOException{
-//         //binding a socket to a port
-//         serverSocket = new ServerSocket(port);
-//         serverSocket.setSoTimeout(1000000);
-//     }
-
-//     public void run(){
-//         boolean connected = true;
-//         while(connected){
-//             try{
-//                 System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-
-//                 /* Start accepting data from the ServerSocket */
-//                 //waits or accepts connection from client
-//                 Socket client = serverSocket.accept();
-
-//                 System.out.println("Just connected to " + client.getRemoteSocketAddress());
-
-//                 while (true) {
-//                     /* Read data from the ClientSocket */
-//                     DataInputStream in = new DataInputStream(client.getInputStream());
-//                     String message = in.readUTF();
-//                     System.out.println(message); //readUTF waits for input
-
-//                     DataOutputStream out = new DataOutputStream(client.getOutputStream());
-//                     /* Send data to the ClientSocket */
-//                     out.writeUTF("From server: " + message);
-//                 }
-//             }catch(SocketTimeoutException s){
-//                 System.out.println("Socket timed out!");
-//                 break;
-//             }catch(IOException e){
-//                 e.printStackTrace();
-//                 System.out.println("Input/Output Error!");
-//                 //possible cause: client was disconnected while waiting for input
-//                 break;
-//             }
-//         }
-//     }

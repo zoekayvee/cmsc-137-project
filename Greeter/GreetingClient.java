@@ -4,13 +4,13 @@ import java.util.Scanner;
 
 public class GreetingClient{
     
-    public static String ign = ""; // in game name
+    public static String ign = ""; // will be 'in game name'
 
     public static void main(String [] args){
         boolean connected = true;
             try{
-                String serverName = args[0]; //get IP address of server from first param
-                int port = Integer.parseInt(args[1]); //get port from second param
+                String serverName = args[0];            //get IP address of server from first param
+                int port = Integer.parseInt(args[1]);   //get port from second param
 
                 /* Open a ClientSocket and connect to ServerSocket */
                 System.out.println("Connecting to " + serverName + " on port " + port);
@@ -23,7 +23,7 @@ public class GreetingClient{
                 Thread sender = new Thread() {
                     public void run() {
                         Scanner s = new Scanner(System.in);
-                        Boolean initial = true;
+                        Boolean initial = true; // flag for asking name
                         try {
                             while(connected) {            
                                 if (initial) {
@@ -31,7 +31,7 @@ public class GreetingClient{
                                     OutputStream outToServer = server.getOutputStream();
                                     DataOutputStream out = new DataOutputStream(outToServer);
 
-                                    // scans name
+                                    // scans user's name
                                     System.out.println("Enter your name: ");
                                     String name;
                                     name = s.nextLine();
@@ -39,8 +39,7 @@ public class GreetingClient{
                                     /* Receive data from the ServerSocket */
                                     InputStream inFromServer = server.getInputStream();
                                     DataInputStream in = new DataInputStream(inFromServer);
-                                    //System.out.println("Server says " + in.readUTF());
-                                
+                                    
                                     ign = name; // sets given name to ign
                                     initial = false; // change the flag 
                                 }
@@ -49,16 +48,15 @@ public class GreetingClient{
                                     OutputStream outToServer = server.getOutputStream();
                                     DataOutputStream out = new DataOutputStream(outToServer);
 
-                                    // scans message
+                                    // scans user's message
                                     String msg;
                                     msg = s.nextLine();
 
-                                    out.writeUTF(ign + ": " + msg);
+                                    out.writeUTF(ign + ": " + msg); // sends msg to server
 
                                     /* Receive data from the ServerSocket */
                                     InputStream inFromServer = server.getInputStream();
                                     DataInputStream in = new DataInputStream(inFromServer);
-                                    //System.out.println("Server says " + in.readUTF());
                                 }
                             }
                         s.close();
@@ -69,14 +67,14 @@ public class GreetingClient{
                     }
                 };
 
-                Thread receiver = new Thread() {
+                Thread receiver = new Thread() { // client receiving all the messages from the server
                     public void run() {
                         try {
                             System.out.println("Will be receiving messages from server");
                             while (connected) {
                                 InputStream inFromServer = server.getInputStream();
                                 DataInputStream in = new DataInputStream(inFromServer);
-                                System.out.println(in.readUTF());
+                                System.out.println(in.readUTF()); // server sends msgs to client
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -84,7 +82,8 @@ public class GreetingClient{
                     }
                 };
 
-                sender.start();
+                // start sending and receiving
+                sender.start(); 
                 receiver.start();
             }catch(IOException e){
                 e.printStackTrace();

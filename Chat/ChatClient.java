@@ -2,8 +2,8 @@ import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class GreetingClient{
-    
+public class ChatClient{
+
     public static String ign = ""; // will be 'in game name'
 
     public static void main(String [] args){
@@ -14,18 +14,18 @@ public class GreetingClient{
 
                 /* Open a ClientSocket and connect to ServerSocket */
                 System.out.println("Connecting to " + serverName + " on port " + port);
-                
+
     			//creating a new socket for client and binding it to a port
                 Socket server = new Socket(serverName, port);
 
                 System.out.println("Just connected to " + server.getRemoteSocketAddress() + "\n\n");
-                
+
                 Thread sender = new Thread() {
                     public void run() {
                         Scanner s = new Scanner(System.in);
                         Boolean initial = true; // flag for asking name
                         try {
-                            while(connected) {            
+                            while(connected) {
                                 if (initial) {
                                     /* Send data to the ServerSocket */
                                     OutputStream outToServer = server.getOutputStream();
@@ -39,9 +39,9 @@ public class GreetingClient{
                                     /* Receive data from the ServerSocket */
                                     InputStream inFromServer = server.getInputStream();
                                     DataInputStream in = new DataInputStream(inFromServer);
-                                    
+
                                     ign = name; // sets given name to ign
-                                    initial = false; // change the flag 
+                                    initial = false; // change the flag
                                 }
                                 else {
                                     /* Send data to the ServerSocket */
@@ -60,7 +60,7 @@ public class GreetingClient{
                                 }
                             }
                         s.close();
-                        } 
+                        }
                         catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -83,7 +83,7 @@ public class GreetingClient{
                 };
 
                 // start sending and receiving
-                sender.start(); 
+                sender.start();
                 receiver.start();
             }catch(IOException e){
                 e.printStackTrace();

@@ -1,5 +1,5 @@
 /*
-  Game screen proper
+  Client game screen proper
 */
 
 import java.awt.Graphics;
@@ -61,8 +61,8 @@ public class Takaw extends JPanel implements Constants {
           serverData = serverData.trim();
 
           if (!connected) {
-            System.out.println("Sending bitch");
             send("CONNECT " + name);
+            connected = true;
           }
 
           if (!serverData.equals("")) {
@@ -71,7 +71,20 @@ public class Takaw extends JPanel implements Constants {
               connected = true;
               System.out.println("Connected");
             } else if (connected) {
-
+              if (serverData.startsWith("PLAYER")){
+                String[] playersInfo = serverData.split(":");
+                for (int i=0;i<playersInfo.length;i++){
+                  String[] playerInfo = playersInfo[i].split(" ");
+                  String pname = playerInfo[1];
+                  int x = Integer.parseInt(playerInfo[2]);
+                  int y = Integer.parseInt(playerInfo[3]);
+                  //draw on the offscreen image
+                  offscreen.getGraphics().fillOval(x, y, 20, 20);
+                  offscreen.getGraphics().drawString(pname,x-10,y+30);
+                }
+                //show the changes
+                frame.repaint();
+              }
             }
           }
         }
@@ -82,13 +95,16 @@ public class Takaw extends JPanel implements Constants {
 
     Thread paint = new Thread() {
       public void run() {
+
         while(true){
           try {
             Thread.sleep(10);
           } catch(Exception ioe){}
+          
           offscreen.getGraphics().clearRect(0, 0, 640, 480);
           offscreen.getGraphics().fillOval(x, y, 20, 20);
-          offscreen.getGraphics().drawString("Zoe",x-10,y+30);
+          offscreen.getGraphics().drawString(name,x-10,y+30);
+
           frame.repaint();
         }
       }
@@ -114,7 +130,7 @@ public class Takaw extends JPanel implements Constants {
 
   class MouseMotionHandler extends MouseMotionAdapter {
     public void mouseMoved(MouseEvent move) {
-      x = move.getX(); y = move.getY();
+//      x = move.getX(); y = move.getY();
       if (prevX != x || prevY != y) {
         send("PLAYER " + name + " " + x + " " + y);
       }

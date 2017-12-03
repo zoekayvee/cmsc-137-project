@@ -1,5 +1,5 @@
 /*
-UI Server
+  UI Server
 */
 
 import java.io.IOException;
@@ -31,68 +31,70 @@ public class GameServer implements Constants {
 
     System.out.println("Game created... ");
 
+    // Thread that listens for packets and handles game information
     Thread t = new Thread() {
       public void run() {
         while(true) {
           byte[] buf = new byte[256];
     			DatagramPacket packet = new DatagramPacket(buf, buf.length);
-    			try{
+
+          // Constantly receive packets
+          try{
          			serverSocket.receive(packet);
     			} catch(Exception ioe){}
 
           playerData = new String(buf);
           playerData = playerData.trim();
 
+          // Checks if player has sent data
           if(!playerData.equals("")){
             System.out.println(playerData);
-          }
-
-          switch(gameStage){
-    				  case WAITING_FOR_PLAYERS:
-    						//System.out.println("Game State: Waiting for players...");
-    						if (playerData.startsWith("CONNECT")){
-    							String[] tokens = playerData.split(" ");
-    							NetPlayer player=new NetPlayer(tokens[1],packet.getAddress(),packet.getPort());
-    							System.out.println("Player connected: "+tokens[1]);
-    							game.addPlayer(tokens[1].trim(),player);
-    							broadcast("CONNECTED "+tokens[1]);
-    							playerCount++;
-    							if (playerCount==numPlayers){
+            // playerData information read depending on state of game
+            switch(gameStage){
+              case WAITING_FOR_PLAYERS:
+                if (playerData.startsWith("CONNECT")){
+                  String[] tokens = playerData.split(" ");
+                  NetPlayer player = new NetPlayer(tokens[1],packet.getAddress(),packet.getPort());
+                  System.out.println("Player connected: "+tokens[1]);
+                  game.addPlayer(tokens[1].trim(),player);
+                  System.out.println("MAY MAKIKICONNECT");
+                  broadcast("CONNECTED "+tokens[1]);
+                  playerCount++;
+                  if (playerCount==numPlayers){
                     System.out.println(playerCount);
-    								gameStage=GAME_START;
-    							}
-    						}
-    					  break;
-    				  case GAME_START:
-    					  System.out.println("Game State: START");
-    					  broadcast("START");
-    					  gameStage=IN_PROGRESS;
-    					  break;
-    				  case IN_PROGRESS:
-    					  //System.out.println("Game State: IN_PROGRESS");
+                    gameStage=GAME_START;
+                  }
+                }
+                break;
 
-    					  //Player data was received!
-    					  if (playerData.startsWith("PLAYER")){
-    						  //Tokenize:
-    						  //The format: PLAYER <player name> <x> <y>
-    						  String[] playerInfo = playerData.split(" ");
-    						  String pname =playerInfo[1];
-    						  int x = Integer.parseInt(playerInfo[2].trim());
-    						  int y = Integer.parseInt(playerInfo[3].trim());
-    						  //Get the player from the game state
-    						  NetPlayer player=(NetPlayer)game.getPlayers().get(pname);
-    						  player.setX(x);
-    						  player.setY(y);
-    						  //Update the game state
-    						  game.addPlayer(pname, player);
-    						  //Send to all the updated game state
-    						  broadcast(game.toString());
-    					  }
-    					  break;
-              }
+              case GAME_START:
+                System.out.println("Game State: START");
+                broadcast("START");
+                gameStage=IN_PROGRESS;
+                break;
+
+              case IN_PROGRESS:
+                if (playerData.startsWith("PLAYER")){
+                  //Tokenize: PLAYER <player name> <x> <y>
+                  String[] playerInfo = playerData.split(" ");
+                  String pname =playerInfo[1];
+                  int x = Integer.parseInt(playerInfo[2].trim());
+                  int y = Integer.parseInt(playerInfo[3].trim());
+                  //Get the player from the game state
+                  NetPlayer player=(NetPlayer)game.getPlayers().get(pname);
+                  player.setX(x);
+                  player.setY(y);
+                  //Update the game state
+                  game.addPlayer(pname, player);
+                  //Send to all the updated game state
+                  broadcast(game.toString());
+                }
+                break;
             }
           }
-        };
+        }
+      }
+    };
     t.start();
   }
 

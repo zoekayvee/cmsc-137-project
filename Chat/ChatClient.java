@@ -5,10 +5,25 @@ import java.util.Scanner;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.lang.*;
 
 public class ChatClient {
 
     public static String ign = ""; // will be 'in game name'
+    public static JTextField chatField = new JTextField(10); // length of text field
+    public static JLabel input = new JLabel(); // input from the user
+    public static String wholeMessages = ""; // for whole messages
+    public static String br = "<br>";
+    public static String openHtml = "<html>";
+    public static String closeHtml = "</html>";
+    public static String messageFromClient = "";
+    public static String messageFromServer = "";
+    public static String messageForClient; // from server
+    public static String temp = "";
+    
+
+    public static boolean chatStart;
+    public static boolean chatReceive = false;
 
     public static void main(String [] args){
         boolean connected = true;
@@ -24,47 +39,50 @@ public class ChatClient {
 
                 System.out.println("Just connected to " + server.getRemoteSocketAddress() + "\n\n");
 
+                // GUI here
+                JFrame frame = new JFrame("Chat");
+                JPanel whole = new JPanel();
+                JLabel prompt1 = new JLabel("Enter your name: ");
+                JTextField nameField = new JTextField(10);
+                JButton enterButton = new JButton("ENTER");
+
+                // size
+                whole.setPreferredSize(new Dimension(300, 300));
+
+                // adding all together
+                whole.add(prompt1);
+                whole.add(nameField);
+                whole.add(enterButton);
+
+                frame.setContentPane(whole);
+                frame.pack();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
+
+                // THREADS
+
                 Thread sender = new Thread() {
                     public void run() {
-                        Scanner s = new Scanner(System.in);
-                        Boolean initial = true; // flag for asking name
                         try {
                             while(connected) {
                                 
-                                if (initial) {
-                                    /* Send data to the ServerSocket */
-                                    OutputStream outToServer = server.getOutputStream();
-                                    DataOutputStream out = new DataOutputStream(outToServer);
+                                /* Send data to the ServerSocket */
+                                OutputStream outToServer = server.getOutputStream();
+                                DataOutputStream out = new DataOutputStream(outToServer);
 
-                                    // scans user's name
-                                    System.out.println("Enter your name: ");
-                                    String name;
-                                    name = s.nextLine();
+                                String msg1;
+                                msg1 = messageFromClient;
 
-                                    /* Receive data from the ServerSocket */
-                                    InputStream inFromServer = server.getInputStream();
-                                    DataInputStream in = new DataInputStream(inFromServer);
-
-                                    ign = name; // sets given name to ign
-                                    initial = false; // change the flag
+                                if (chatStart == true) { // will only send to server when client enters a chat
+                                    out.writeUTF(ign + ": " + msg1); // sends msg to server
+                                    chatStart = false;
                                 }
-                                else {
-                                    /* Send data to the ServerSocket */
-                                    OutputStream outToServer = server.getOutputStream();
-                                    DataOutputStream out = new DataOutputStream(outToServer);
 
-                                    // scans user's message
-                                    String msg;
-                                    msg = s.nextLine();
-
-                                    out.writeUTF(ign + ": " + msg); // sends msg to server
-
-                                    /* Receive data from the ServerSocket */
-                                    InputStream inFromServer = server.getInputStream();
-                                    DataInputStream in = new DataInputStream(inFromServer);
-                                }
+                                /* Receive data from the ServerSocket */
+                                InputStream inFromServer = server.getInputStream();
+                                DataInputStream in = new DataInputStream(inFromServer);
                             }
-                        s.close();
+                        
                         }
                         catch (IOException e) {
                             e.printStackTrace();
@@ -79,7 +97,22 @@ public class ChatClient {
                             while (connected) {
                                 InputStream inFromServer = server.getInputStream();
                                 DataInputStream in = new DataInputStream(inFromServer);
-                                System.out.println(in.readUTF()); // server sends msgs to client
+                                
+
+                                try {
+                                    Thread.sleep(300); // for waiting the message from the server
+                                    
+                                    messageFromServer = in.readUTF();
+                                    System.out.println(messageFromServer);
+                                    wholeMessages = wholeMessages + messageFromServer; // prev message + new message
+                                    wholeMessages = wholeMessages + br; // adds <br> for output
+                                    temp = openHtml + wholeMessages + closeHtml; // adds the htmls for output
+                                
+                                    input.setText(temp); // displays the message in the UI
+                                }   
+                                catch (Exception f){
+                                    f.printStackTrace();
+                                }
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -87,44 +120,44 @@ public class ChatClient {
                     }
                 };
 
-                // GUI here
-                JFrame frame = new JFrame("Chat");
-                
-                final JPanel upper = new JPanel();
-                final JPanel lower = new JPanel();
-                final JPanel whole = new JPanel();
+                enterButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        String name = nameField.getText(); // scans name
+                        prompt1.setText("Typing as " + name);
+                        nameField.setText(""); // clearing the text after typing
+                        ign = name; // sets given name to ign after asking name
 
-                // for upper ui
-                JLabel prompt1 = new JLabel("Enter your name: ");
-                JTextField nameField = new JTextField(30);
-                JButton enterButton = new JButton("ENTER");
+                        // removing some elements after 
+                        whole.remove(enterButton);
+                        whole.remove(nameField);
+                        whole.repaint();
 
-                // for lower ui
-                JLabel allChat = new JLabel(); // for all chat
+                        // adds new elements
+                        whole.add(chatField);
+                        JLabel msg2 = new JLabel();
+                        whole.add(msg2);
+                        whole.add(input); // jlabel for displaying all chat   
+                    }
+                });
 
-                // sizes
-                upper.setPreferredSize(new Dimension(600, 200));
-                lower.setPreferredSize(new Dimension(600, 400));
-                whole.setPreferredSize(new Dimension(600, 600));
+                // getting message from user and displaying it
+                chatField.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
 
-                // adding all together
-                upper.add(prompt1);
-                upper.add(nameField);
-                upper.add(enterButton);
+                        String message = chatField.getText(); // asks a message
+                        messageFromClient = message;
+                        chatField.setText(""); // clears input field after entering a message
+                        chatStart = true; // will allow the sender to send to the server 
 
-                lower.add(allChat);
+                        
+                    }
+                });
 
-                whole.add(upper);
-                whole.add(lower);
-
-                frame.setContentPane(whole);
-                frame.pack();
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
 
                 // start sending and receiving
                 sender.start();
                 receiver.start();
+        
             }catch(IOException e){
                 e.printStackTrace();
                 System.out.println("Cannot find (or disconnected from) Server");

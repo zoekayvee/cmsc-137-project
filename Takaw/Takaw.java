@@ -116,6 +116,10 @@ public class Takaw extends JPanel implements Constants {
                 Food orb = new Food(fid, ftype, x, y);
                 food.put(orb.getId(), orb);
               }
+              if (serverData.startsWith("ENDGAME")) {
+                System.out.println("End of Game");
+                break;
+              }
             }
           }
         }

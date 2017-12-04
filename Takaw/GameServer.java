@@ -17,6 +17,9 @@ public class GameServer implements Constants {
   int gameStage = WAITING_FOR_PLAYERS;
   int numPlayers;
   String playerData;
+  long startTime;
+  long estimatedTime;
+  boolean endGame = false;
 
   public GameServer(int numPlayers) {
     this.numPlayers = numPlayers;
@@ -35,9 +38,9 @@ public class GameServer implements Constants {
     // Generates good and bad food in the game state
     Thread food = new Thread() {
       public void run(){
-        while(true) {
+        while(!endGame) {
           try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
           } catch(Exception ioe){}
 
           NetFood goodFood = new NetFood(GOOD);
@@ -93,11 +96,19 @@ public class GameServer implements Constants {
                 broadcast(game.playerData());
                 System.out.println("Game State: START");
                 broadcast("START");
+                startTime = System.currentTimeMillis();
                 food.start();
                 gameStage=IN_PROGRESS;
                 break;
 
               case IN_PROGRESS:
+                // Stops game after 3 minutes
+                estimatedTime = System.currentTimeMillis() - startTime;
+                if (estimatedTime > 180000) {
+                  broadcast("ENDGAME");
+                  endGame = true;
+                  break;
+                }
                 if (playerData.startsWith("PLAYER")){
                   //Tokenize: PLAYER <player name> <x> <y>
                   String[] playerInfo = playerData.split(" ");

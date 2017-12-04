@@ -31,5 +31,6 @@ public class GameState {
   public Map getPlayers() {
     return players;
   }
+  public Map getFood() {return food;}
 
 }

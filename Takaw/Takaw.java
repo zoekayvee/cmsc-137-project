@@ -116,6 +116,11 @@ public class Takaw extends JPanel implements Constants {
                 Food orb = new Food(fid, ftype, x, y);
                 food.put(orb.getId(), orb);
               }
+              if (serverData.startsWith("FOODEATEN")) {
+                String[] foodEaten = serverData.split(" ");
+                String fid = foodEaten[1];
+                food.remove(foodEaten[1]);
+              }
               if (serverData.startsWith("ENDGAME")) {
                 System.out.println("End of Game");
                 break;
@@ -217,6 +222,8 @@ public class Takaw extends JPanel implements Constants {
       System.out.println("Usage: java Takaw <server> <player name>");
       System.exit(1);
     }
+
+    new ChatClient(args[0], 3000, args[1]);
 
     new Takaw(args[0],args[1]);
   }

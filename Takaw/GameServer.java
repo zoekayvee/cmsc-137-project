@@ -20,6 +20,7 @@ public class GameServer implements Constants {
   long startTime;
   long estimatedTime;
   boolean endGame = false;
+//  ChatServer chatServer;
 
   public GameServer(int numPlayers) {
     this.numPlayers = numPlayers;
@@ -31,6 +32,18 @@ public class GameServer implements Constants {
       System.exit(-1);
     } catch (Exception e){}
 
+      try{
+        new ChatServer(3000);
+
+        } catch(IOException e){
+            //e.printStackTrace();
+            System.out.println("Usage: java GreetingServer <port no.>\n"+
+                    "Make sure to use valid ports (greater than 1023)");
+        }catch(ArrayIndexOutOfBoundsException e){
+            //e.printStackTrace();
+            System.out.println("Usage: java GreetingServer <port no.>\n"+
+                    "Insufficient arguments given.");
+        }
     game = new GameState();
 
     System.out.println("Game created... ");
@@ -51,6 +64,32 @@ public class GameServer implements Constants {
 
           broadcast(goodFood.toString());
           broadcast(badFood.toString());
+        }
+      }
+    };
+
+    Thread collisionDetection = new Thread(){
+      public void run(){
+        while(!endGame) {
+          try{
+            Thread.sleep(1000);
+          } catch(Exception ioe){}
+
+          Iterator itPlayer = game.getPlayers().entrySet().iterator();
+          while (itPlayer.hasNext()) {
+            Map.Entry pairPlayer = (Map.Entry)itPlayer.next();
+            NetPlayer player = (NetPlayer) pairPlayer.getValue();
+            Iterator itFood = game.getFood().entrySet().iterator();
+            while(itFood.hasNext()) {
+              Map.Entry pairFood = (Map.Entry)itFood.next();
+              NetFood orb = (NetFood) pairFood.getValue();
+              System.out.println(player.getX() + player.getY() + orb.getX() + orb.getY());
+              if (checkCollision(player.getX(), player.getY(), orb.getX(), orb.getY())){
+                broadcast("FOODEATEN " + orb.getId());
+                System.out.println("FOOD HAS BEEN EATEN");
+              }
+            }
+          }
         }
       }
     };
@@ -98,6 +137,7 @@ public class GameServer implements Constants {
                 broadcast("START");
                 startTime = System.currentTimeMillis();
                 food.start();
+                collisionDetection.start();
                 gameStage=IN_PROGRESS;
                 break;
 
@@ -150,6 +190,15 @@ public class GameServer implements Constants {
 			ioe.printStackTrace();
 		}
 	}
+
+	// Checks for collision
+	public boolean checkCollision(int px, int py, int fx, int fy) {
+      if (px == fx && py == fy){
+          return true;
+      }
+      else return false;
+    }
+
 
   public static void main(String args[]) {
     if (args.length != 1) {

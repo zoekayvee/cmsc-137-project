@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ec968605-4a43-4d73-b81b-9f70f6e610c4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Takaw/Chat.java" afterPath="$PROJECT_DIR$/Takaw/Chat.java" />
-      <change beforePath="$PROJECT_DIR$/Takaw/ChatClient.java" afterPath="$PROJECT_DIR$/Takaw/ChatClient.java" />
+      <change beforePath="$PROJECT_DIR$/Takaw/GameServer.java" afterPath="$PROJECT_DIR$/Takaw/GameServer.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,9 +16,12 @@
       <file leaf-file-name="GameServer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Takaw/GameServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="468">
+              <caret line="93" column="9" lean-forward="true" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
+              <folding>
+                <element signature="e#3054#5880#0" expanded="true" />
+                <element signature="e#5879#5880#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -41,7 +42,7 @@
         <entry file="file://$PROJECT_DIR$/Takaw/Chat.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="17" lean-forward="true" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
+              <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -51,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/Takaw/ChatClient.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="216">
-              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
               <folding>
                 <element signature="e#2258#3408#0" expanded="true" />
                 <element signature="e#3407#3408#0" expanded="true" />
@@ -66,7 +67,7 @@
         <entry file="file://$PROJECT_DIR$/Chat/ChatClient.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="514">
-              <caret line="164" column="7" lean-forward="true" selection-start-line="164" selection-start-column="7" selection-end-line="164" selection-end-column="7" />
+              <caret line="164" column="7" lean-forward="false" selection-start-line="164" selection-start-column="7" selection-end-line="164" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -642,32 +643,32 @@
         <state relative-caret-position="252">
           <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="30" selection-end-column="5" />
           <folding>
-            <element signature="e#0#1657#0" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="e#703#704#0" expanded="true" />
-            <element signature="e#728#729#0" expanded="true" />
-            <element signature="e#764#765#0" expanded="true" />
-            <element signature="e#792#793#0" expanded="true" />
-            <element signature="e#820#821#0" expanded="true" />
-            <element signature="e#847#848#0" expanded="true" />
-            <element signature="e#884#885#0" expanded="true" />
-            <element signature="e#916#917#0" expanded="true" />
-            <element signature="e#948#949#0" expanded="true" />
-            <element signature="e#977#978#0" expanded="true" />
-            <element signature="e#1020#1021#0" expanded="true" />
-            <element signature="e#1056#1057#0" expanded="true" />
-            <element signature="e#1081#1082#0" expanded="true" />
-            <element signature="e#1105#1106#0" expanded="true" />
-            <element signature="e#1136#1137#0" expanded="true" />
-            <element signature="e#1162#1163#0" expanded="true" />
-            <element signature="e#1187#1188#0" expanded="true" />
-            <element signature="e#1211#1212#0" expanded="true" />
-            <element signature="e#1242#1243#0" expanded="true" />
-            <element signature="e#1268#1269#0" expanded="true" />
-            <element signature="e#1298#1299#0" expanded="true" />
-            <element signature="e#1327#1328#0" expanded="true" />
-            <element signature="e#1368#1369#0" expanded="true" />
-            <element signature="e#1404#1405#0" expanded="true" />
+            <element signature="e#0#1657#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#703#704#0" expanded="false" />
+            <element signature="e#728#729#0" expanded="false" />
+            <element signature="e#764#765#0" expanded="false" />
+            <element signature="e#792#793#0" expanded="false" />
+            <element signature="e#820#821#0" expanded="false" />
+            <element signature="e#847#848#0" expanded="false" />
+            <element signature="e#884#885#0" expanded="false" />
+            <element signature="e#916#917#0" expanded="false" />
+            <element signature="e#948#949#0" expanded="false" />
+            <element signature="e#977#978#0" expanded="false" />
+            <element signature="e#1020#1021#0" expanded="false" />
+            <element signature="e#1056#1057#0" expanded="false" />
+            <element signature="e#1081#1082#0" expanded="false" />
+            <element signature="e#1105#1106#0" expanded="false" />
+            <element signature="e#1136#1137#0" expanded="false" />
+            <element signature="e#1162#1163#0" expanded="false" />
+            <element signature="e#1187#1188#0" expanded="false" />
+            <element signature="e#1211#1212#0" expanded="false" />
+            <element signature="e#1242#1243#0" expanded="false" />
+            <element signature="e#1268#1269#0" expanded="false" />
+            <element signature="e#1298#1299#0" expanded="false" />
+            <element signature="e#1327#1328#0" expanded="false" />
+            <element signature="e#1368#1369#0" expanded="false" />
+            <element signature="e#1404#1405#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -775,7 +776,7 @@
     <entry file="file://$PROJECT_DIR$/Takaw/Chat.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="17" lean-forward="true" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
+          <caret line="0" column="17" lean-forward="false" selection-start-line="0" selection-start-column="17" selection-end-line="0" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -783,7 +784,7 @@
     <entry file="file://$PROJECT_DIR$/Takaw/ChatClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
-          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding>
             <element signature="e#2258#3408#0" expanded="true" />
             <element signature="e#3407#3408#0" expanded="true" />
@@ -796,7 +797,7 @@
     <entry file="file://$PROJECT_DIR$/Chat/ChatClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="514">
-          <caret line="164" column="7" lean-forward="true" selection-start-line="164" selection-start-column="7" selection-end-line="164" selection-end-column="7" />
+          <caret line="164" column="7" lean-forward="false" selection-start-line="164" selection-start-column="7" selection-end-line="164" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -805,9 +806,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Takaw/GameServer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="468">
+          <caret line="93" column="9" lean-forward="true" selection-start-line="93" selection-start-column="9" selection-end-line="93" selection-end-column="9" />
+          <folding>
+            <element signature="e#3054#5880#0" expanded="true" />
+            <element signature="e#5879#5880#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

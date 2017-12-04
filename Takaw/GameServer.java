@@ -68,31 +68,31 @@ public class GameServer implements Constants {
       }
     };
 
-    Thread collisionDetection = new Thread(){
-      public void run(){
-        while(!endGame) {
-          try{
-            Thread.sleep(1000);
-          } catch(Exception ioe){}
-
-          Iterator itPlayer = game.getPlayers().entrySet().iterator();
-          while (itPlayer.hasNext()) {
-            Map.Entry pairPlayer = (Map.Entry)itPlayer.next();
-            NetPlayer player = (NetPlayer) pairPlayer.getValue();
-            Iterator itFood = game.getFood().entrySet().iterator();
-            while(itFood.hasNext()) {
-              Map.Entry pairFood = (Map.Entry)itFood.next();
-              NetFood orb = (NetFood) pairFood.getValue();
-              System.out.println(player.getX() + player.getY() + orb.getX() + orb.getY());
-              if (checkCollision(player.getX(), player.getY(), orb.getX(), orb.getY())){
-                broadcast("FOODEATEN " + orb.getId());
-                System.out.println("FOOD HAS BEEN EATEN");
-              }
-            }
-          }
-        }
-      }
-    };
+//    Thread collisionDetection = new Thread(){
+//      public void run(){
+//        while(!endGame) {
+//          try{
+//            Thread.sleep(1000);
+//          } catch(Exception ioe){}
+//
+//          Iterator itPlayer = game.getPlayers().entrySet().iterator();
+//          while (itPlayer.hasNext()) {
+//            Map.Entry pairPlayer = (Map.Entry)itPlayer.next();
+//            NetPlayer player = (NetPlayer) pairPlayer.getValue();
+//            Iterator itFood = game.getFood().entrySet().iterator();
+//            while(itFood.hasNext()) {
+//              Map.Entry pairFood = (Map.Entry)itFood.next();
+//              NetFood orb = (NetFood) pairFood.getValue();
+//              System.out.println(player.getX() + player.getY() + orb.getX() + orb.getY());
+//              if (checkCollision(player.getX(), player.getY(), orb.getX(), orb.getY())){
+//                broadcast("FOODEATEN " + orb.getId());
+//                System.out.println("FOOD HAS BEEN EATEN");
+//              }
+//            }
+//          }
+//        }
+//      }
+//    };
 
     // Thread that listens for packets and handles game information
     Thread t = new Thread() {

@@ -1,3 +1,7 @@
+/*
+* Player data and information
+*/
+
 import java.net.InetAddress;
 import java.util.UUID;
 
@@ -8,11 +12,11 @@ public class NetPlayer {
   private String id;
   private int x,y;
 
-  public NetPlayer(String name, InetAddress address, int port) {
+  public NetPlayer(String id, String name, InetAddress address, int port) {
     this.address = address;
     this.port = port;
     this.name = name;
-    this.id = UUID.randomUUID().toString();
+    this.id = id;
   }
 
   public InetAddress getAddress() {
@@ -33,9 +37,9 @@ public class NetPlayer {
 
   public void setX(int x){
 		this.x=x;
-	}
+  }
 
-	public int getX(){
+  public int getX(){
 		return x;
 	}
 
@@ -43,7 +47,26 @@ public class NetPlayer {
 		return y;
 	}
 
-	public void setY(int y){
+    public void setY(int y){
 		this.y=y;
 	}
+
+	public String toStringAdd(){
+      String retval="";
+      retval+="ADDPLAYER ";
+      retval+=id+" ";
+      retval+=name+" ";
+      retval+=x+" ";
+      retval+=y;
+      return retval;
+    }
+
+    public String toString(){
+        String retval="";
+        retval+="PLAYER ";
+        retval+=id+" ";
+        retval+=x+" ";
+        retval+=y;
+        return retval;
+    }
 }

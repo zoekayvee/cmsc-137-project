@@ -8,6 +8,7 @@ import java.net.DatagramSocket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 public class GameServer implements Constants {
   int playerCount = 0;
@@ -40,8 +41,8 @@ public class GameServer implements Constants {
 
           // Constantly receive packets
           try{
-         			serverSocket.receive(packet);
-    			} catch(Exception ioe){}
+            serverSocket.receive(packet);
+          } catch(Exception ioe){}
 
           playerData = new String(buf);
           playerData = playerData.trim();
@@ -49,15 +50,15 @@ public class GameServer implements Constants {
           // Checks if player has sent data
           if(!playerData.equals("")){
             System.out.println(playerData);
-            // playerData information read depending on state of game
+//             playerData information read depending on state of game
             switch(gameStage){
               case WAITING_FOR_PLAYERS:
                 if (playerData.startsWith("CONNECT")){
                   String[] tokens = playerData.split(" ");
-                  NetPlayer player = new NetPlayer(tokens[1],packet.getAddress(),packet.getPort());
-                  System.out.println("Player connected: "+tokens[1]);
-                  game.addPlayer(tokens[1].trim(),player);
-                  System.out.println("MAY MAKIKICONNECT");
+                  // Constructs player details
+                  NetPlayer player = new NetPlayer(tokens[1], tokens[2], packet.getAddress(),packet.getPort());
+                  System.out.println("Player connected: "+ player.getID());
+                  game.addPlayer(player.getID(), player);
                   broadcast("CONNECTED "+tokens[1]);
                   playerCount++;
                   if (playerCount==numPlayers){
@@ -68,6 +69,8 @@ public class GameServer implements Constants {
                 break;
 
               case GAME_START:
+                // Sends player information to clients
+                broadcast(game.playerData());
                 System.out.println("Game State: START");
                 broadcast("START");
                 gameStage=IN_PROGRESS;
@@ -77,17 +80,16 @@ public class GameServer implements Constants {
                 if (playerData.startsWith("PLAYER")){
                   //Tokenize: PLAYER <player name> <x> <y>
                   String[] playerInfo = playerData.split(" ");
-                  String pname =playerInfo[1];
+                  String id = playerInfo[1];
                   int x = Integer.parseInt(playerInfo[2].trim());
                   int y = Integer.parseInt(playerInfo[3].trim());
                   //Get the player from the game state
-                  NetPlayer player=(NetPlayer)game.getPlayers().get(pname);
+                  NetPlayer player=(NetPlayer) game.getPlayers().get(id);
                   player.setX(x);
                   player.setY(y);
-                  //Update the game state
-                  game.addPlayer(pname, player);
+
                   //Send to all the updated game state
-                  broadcast(game.toString());
+                  broadcast(player.toString());
                 }
                 break;
             }
@@ -100,8 +102,8 @@ public class GameServer implements Constants {
 
   public void broadcast(String msg){
 		for(Iterator ite=game.getPlayers().keySet().iterator();ite.hasNext();){
-			String name=(String)ite.next();
-			NetPlayer player=(NetPlayer)game.getPlayers().get(name);
+			String id=(String)ite.next();
+			NetPlayer player=(NetPlayer)game.getPlayers().get(id);
 			send(player,msg);
 		}
 	}

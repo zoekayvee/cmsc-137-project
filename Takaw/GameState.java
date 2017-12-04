@@ -4,14 +4,17 @@ import java.util.Map;
 
 public class GameState {
   private Map players = new HashMap();
+  private Map food = new HashMap();
 
   public GameState() {
 
-    }
+  }
 
   public void addPlayer(String id, NetPlayer player) {
     players.put(id, player);
   }
+
+  public void generateFood(String id, NetFood orb) {food.put(id, orb);}
 
   public String playerData(){
       String retval="";

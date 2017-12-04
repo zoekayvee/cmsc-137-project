@@ -32,6 +32,26 @@ public class GameServer implements Constants {
 
     System.out.println("Game created... ");
 
+    // Generates good and bad food in the game state
+    Thread food = new Thread() {
+      public void run(){
+        while(true) {
+          try {
+            Thread.sleep(5000);
+          } catch(Exception ioe){}
+
+          NetFood goodFood = new NetFood(GOOD);
+          NetFood badFood = new NetFood(BAD);
+
+          game.generateFood(goodFood.getId(), goodFood);
+          game.generateFood(badFood.getId(), badFood);
+
+          broadcast(goodFood.toString());
+          broadcast(badFood.toString());
+        }
+      }
+    };
+
     // Thread that listens for packets and handles game information
     Thread t = new Thread() {
       public void run() {
@@ -73,6 +93,7 @@ public class GameServer implements Constants {
                 broadcast(game.playerData());
                 System.out.println("Game State: START");
                 broadcast("START");
+                food.start();
                 gameStage=IN_PROGRESS;
                 break;
 

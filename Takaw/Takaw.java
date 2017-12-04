@@ -2,7 +2,7 @@
   Client game screen proper
 */
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,8 +21,11 @@ import java.util.UUID;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import static java.awt.Color.RED;
+
 public class Takaw extends JPanel implements Constants {
   private HashMap players = new HashMap();
+  private HashMap food = new HashMap();
 
   JFrame frame = new JFrame();
 
@@ -96,15 +99,22 @@ public class Takaw extends JPanel implements Constants {
               // Updates hashmap values if player moves
               if (serverData.startsWith("PLAYER")){
                 String[] playerInfo = serverData.split(" ");
-//                if(playerInfo.length == 3) {
-                  String id = playerInfo[1];
-                  int x = Integer.parseInt(playerInfo[2]);
-                  int y = Integer.parseInt(playerInfo[3]);
-                  Matakaw player = (Matakaw) players.get(id);
-                  player.setX(x);
-                  player.setY(y);
-                  System.out.println(player.getX() + " " + player.getY());
-//                }
+                String id = playerInfo[1];
+                int x = Integer.parseInt(playerInfo[2]);
+                int y = Integer.parseInt(playerInfo[3]);
+                Matakaw player = (Matakaw) players.get(id);
+                player.setX(x);
+                player.setY(y);
+                System.out.println(player.getX() + " " + player.getY());
+              }
+              if (serverData.startsWith("FOOD")) {
+                String[] foodData = serverData.split(" ");
+                String fid = foodData[1];
+                int ftype = Integer.parseInt(foodData[2]);
+                int x = Integer.parseInt(foodData[3]);
+                int y = Integer.parseInt(foodData[4]);
+                Food orb = new Food(fid, ftype, x, y);
+                food.put(orb.getId(), orb);
               }
             }
           }
@@ -123,15 +133,28 @@ public class Takaw extends JPanel implements Constants {
             Thread.sleep(10);
           } catch(Exception ioe){}
 
-          Iterator it = players.entrySet().iterator();
+          Iterator itPlayer = players.entrySet().iterator();
           offscreen.getGraphics().clearRect(0, 0, 640, 480);
-          while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
+          while (itPlayer.hasNext()) {
+            Map.Entry pair = (Map.Entry)itPlayer.next();
             Matakaw player = (Matakaw) pair.getValue();
             offscreen.getGraphics().fillOval(player.getX(), player.getY(), 20, 20);
             offscreen.getGraphics().drawString(player.getName(),player.getX()-10,player.getY()+30);
 //            it.remove();
           }
+
+          Iterator itFood = food.entrySet().iterator();
+          while (itFood.hasNext()) {
+            Map.Entry pair = (Map.Entry)itFood.next();
+            Food orb = (Food) pair.getValue();
+            if(orb.getType() == GOOD) {
+              offscreen.getGraphics().setColor(Color.GREEN);
+            } else {
+              offscreen.getGraphics().setColor(Color.RED);
+            }
+            offscreen.getGraphics().fillOval(orb.getX(), orb.getY(), 10, 10);
+          }
+
           frame.repaint();
         }
       }

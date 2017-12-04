@@ -19,7 +19,8 @@ public class ChatClient {
     public static String messageFromServer = "";
     public static String messageForClient; // from server
     public static String temp = "";
-
+    public static JButton instructionsButton = new JButton("Instructions");
+    public static JLabel newLine = new JLabel("<html>---<br></html>");
 
     public static boolean chatStart;
     public static boolean chatReceive = false;
@@ -49,6 +50,8 @@ public class ChatClient {
             whole.setPreferredSize(new Dimension(300, 300));
 
             // adding all together
+            whole.add(instructionsButton);
+            whole.add(newLine);
             whole.add(prompt1);
             whole.add(nameField);
             whole.add(enterButton);
@@ -148,6 +151,33 @@ public class ChatClient {
                     chatField.setText(""); // clears input field after entering a message
                     chatStart = true; // will allow the sender to send to the server
 
+
+                }
+            });
+
+            instructionsButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                 
+                // GUI here
+                JFrame frame2 = new JFrame("Game Instructions");
+                JPanel whole2 = new JPanel();
+                JLabel header = new JLabel("Game mechanics of TAKAW");
+
+               
+                String labelContent = "<html>RULES<BR>The game ends after 3 minutes.<BR>The player with the biggest size wins.<BR><BR><BR>HOW TO PLAY<BR>1.Use your mouse to move your<BR>circle avatar around the map<BR>2.Increase your size by 'eating'<BR>the food (smaller circles) by moving close<BR>and pass it<BR>3.If you have a bigger size compared<BR>to another player/s, try to eat them by<BR>treating them as food<BR>4.If you have a smaller size compared<BR>to another player/s, prevent being eaten<BR>by moving away from them</html>";
+
+                JLabel actualInstructions = new JLabel(labelContent);
+
+
+                // size
+                whole2.setPreferredSize(new Dimension(500, 600));
+
+                whole2.add(actualInstructions);
+
+                frame2.setContentPane(whole2);
+                frame2.pack();
+                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame2.setVisible(true);
 
                 }
             });

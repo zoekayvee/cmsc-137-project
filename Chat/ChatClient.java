@@ -162,7 +162,7 @@ public class ChatClient {
                 e.printStackTrace();
                 System.out.println("Cannot find (or disconnected from) Server");
             }catch(ArrayIndexOutOfBoundsException e){
-                System.out.println("Usage: java GreetingClient <server ip> <port no.>");
+                System.out.println("Usage: java ChatClient <server ip> <port no.>");
             }
     }
 }

@@ -2,7 +2,11 @@ import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class ChatClient{
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ChatClient {
 
     public static String ign = ""; // will be 'in game name'
 
@@ -26,6 +30,7 @@ public class ChatClient{
                         Boolean initial = true; // flag for asking name
                         try {
                             while(connected) {
+                                
                                 if (initial) {
                                     /* Send data to the ServerSocket */
                                     OutputStream outToServer = server.getOutputStream();
@@ -81,6 +86,41 @@ public class ChatClient{
                         }
                     }
                 };
+
+                // GUI here
+                JFrame frame = new JFrame("Chat");
+                
+                final JPanel upper = new JPanel();
+                final JPanel lower = new JPanel();
+                final JPanel whole = new JPanel();
+
+                // for upper ui
+                JLabel prompt1 = new JLabel("Enter your name: ");
+                JTextField nameField = new JTextField(30);
+                JButton enterButton = new JButton("ENTER");
+
+                // for lower ui
+                JLabel allChat = new JLabel(); // for all chat
+
+                // sizes
+                upper.setPreferredSize(new Dimension(600, 200));
+                lower.setPreferredSize(new Dimension(600, 400));
+                whole.setPreferredSize(new Dimension(600, 600));
+
+                // adding all together
+                upper.add(prompt1);
+                upper.add(nameField);
+                upper.add(enterButton);
+
+                lower.add(allChat);
+
+                whole.add(upper);
+                whole.add(lower);
+
+                frame.setContentPane(whole);
+                frame.pack();
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setVisible(true);
 
                 // start sending and receiving
                 sender.start();

@@ -16,12 +16,12 @@ public class Chat extends JFrame {
 	String closeHtml = "</html>";
 
 	public Chat() {
-	
+
 		// build
-		jp.add(prompt); 
+		jp.add(prompt);
 		jp.add(nameField);
 		jp.add(enterButton);
-		add(jp); 
+		add(jp);
 
 		// set up
 		setTitle("Test Chat");
@@ -30,15 +30,15 @@ public class Chat extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		/*
-		*	KEY LISTENERS
-		*/
+		 *	KEY LISTENERS
+		 */
 
 		// entering name
 		enterButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = nameField.getText(); // scans name
 				prompt.setText("Typing as " + name);
-			
+
 				// changes after clicking Enter button
 				jp.remove(enterButton); // removes Enter button after clicking it 
 				jp.remove(nameField);
@@ -57,11 +57,11 @@ public class Chat extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				String message = chatField.getText(); // asks a message
-				
+
 				wholeMessages = wholeMessages + message; // prev message + new message
 
 				chatField.setText(""); // clearing after entering a message
-				
+
 				wholeMessages = wholeMessages + br; // adds <br> for output
 
 				String temp = openHtml + wholeMessages; // adds the htmls for output
